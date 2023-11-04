@@ -9,6 +9,7 @@ router.setRoutes([
   { path: '/my-page2', component: 'my-page2' },
   { path: '/my-campanas', component: 'my-campanas' },
   { path: '/my-equipo', component: 'my-equipo' },
+  { path: '/my-profesor', component: 'my-profesor' },
 ]);
 
 
