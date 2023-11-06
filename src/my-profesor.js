@@ -1,7 +1,9 @@
 import { LitElement, html } from "lit-element";
 import { Router } from '@vaadin/router'; 
 
+
 export class MyElement extends LitElement {
+
   constructor() {
     super();
     this.profesores = []; 
@@ -11,14 +13,6 @@ export class MyElement extends LitElement {
     this.materia = '';
     this.jornada = '';
     this.curso = ''; 
-
-    //actualizar
-    this.documentoActualizar = this.documento;
-    this.nombreActualizar = this.nombre;
-    this.edadActualizar = this.edad;
-    this.materiaActualizar = this.materia;
-    this.jornadaActualizar = this.jornada;
-    this.cursoActualizar = this.curso;
   }
 
   static get properties() {
@@ -69,23 +63,26 @@ export class MyElement extends LitElement {
 
 
   actualizarProfesor(profesor) {
-    if (profesor && profesor.nombre) {
-      const indiceProfesor = this.profesores.filter((p) => p.documento === profesor.documento);
-      
-        this.profesores[indiceProfesor] = {
-          nombre: this.nombreActualizar,
-          documento: this.documentoActualizar,
-          edad: this.edadActualizar,
-          materia: this.materiaActualizar,
-          jornada: this.jornadaActualizar,
-          curso: this.cursoActualizar,
-        };
-        this.guardarProfesores();
-        this.cerrarModalActualizar();
-      }else {
-      console.log("Error no se actualiza");
-      abrirModalActualizar(profesor) 
-    }
+    console.log(profesor);
+    let arregloProfesor = this.profesores.find((arregloProfesor)=>arregloProfesor.documento === profesor)
+    console.log(arregloProfesor);
+    let documento = this.shadowRoot.querySelector('#documentoActualizar').value
+    let nombre = this.shadowRoot.querySelector('#nombreActualizar').value
+    let edad = this.shadowRoot.querySelector('#edadActualizar').value
+    let materia = this.shadowRoot.querySelector('#materiaActualizar').value
+    let jornada = this.shadowRoot.querySelector('#jornadaActualizar').value
+    let curso = this.shadowRoot.querySelector('#cursoActualizar').value
+
+    console.log(documento, nombre,edad,materia,jornada,curso)
+
+    arregloProfesor.documento = documento
+    arregloProfesor.nombre = nombre
+    arregloProfesor.edad = edad
+    arregloProfesor.materia = materia
+    arregloProfesor.jornada = jornada
+    arregloProfesor.curso = curso
+
+    this.requestUpdate()
   }
   
   
@@ -110,18 +107,9 @@ cerrarModal() {
   miModal.style.display = "none";
 }
 
-abrirModalActualizar(profesor) {
-  if (profesor) {
-    this.nombreActualizar = profesor.nombre;
-    this.documentoActualizar = profesor.documento;
-    this.edadActualizar = profesor.edad;
-    this.materiaActualizar = profesor.materia;
-    this.jornadaActualizar = profesor.jornada;
-    this.cursoActualizar = profesor.curso;
-
+abrirModalActualizar() {
     const miModal = this.shadowRoot.querySelector("#modalActualizar");
     miModal.style.display = "block";
-  }
 }
 
 
@@ -135,6 +123,7 @@ abrirModalActualizar(profesor) {
 
   navigate(location) {
     Router.go(location);
+    
   }
 
 
@@ -170,6 +159,12 @@ buscarDatos() {
     `;
   }
   this.requestUpdate();
+}
+
+static get scopedElements(){
+  return{
+    "my-profesor": MyElement,
+  };
 }
 
   render() {
@@ -390,16 +385,11 @@ buscarDatos() {
         <td>${profesor.materia}</td>
         <td>${profesor.jornada}</td>
         <td>${profesor.curso}</td>
-        <td><button class="btn btn-primary" @click="${() => { console.log(profesor); this.abrirModalActualizar(profesor); }}">Actualizar</button></td>
+        <td><button class="btn btn-primary" @click="${() => { console.log(profesor); this.abrirModalActualizar(profesor.documento); }}">Actualizar</button></td>
         <td><button class="btn btn-danger" @click="${() => this.eliminarProfesor(profesor)}">Eliminar</button></td>
       </tr>
-    `
-  )}
-</tbody>
-</table>
-</div>
 
-<div class="modal" id="modalActualizar" tabindex="-1" role="dialog" style="display: none;">
+      <div class="modal" id="modalActualizar" tabindex="-1" role="dialog" style="display: none;">
 <div class="modal-dialog" role="document">
   <div class="modal-content">
     <div class="modal-header">
@@ -410,34 +400,42 @@ buscarDatos() {
       <form id="actualizarForm">
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre de profesor</label>
-          <input type="text" class="form-control" id="nombreActualizar" .value="${this.nombreActualizar}" @input="${(e) => (this.nombreActualizar = e.target.value)}">
+          <input type="text" class="form-control" id="nombreActualizar" .value="${profesor.nombre}">
         </div>
         <div class="mb-3">
           <label for="identificacion" class="form-label">Documento</label>
-          <input type="text" class="form-control" id="identificacionActualizar" .value="${this.documentoActualizar}" @input="${(e) => (this.documentoActualizar = e.target.value)}">
+          <input type="text" class="form-control" id="documentoActualizar" .value="${profesor.documento}">
         </div>
         <div class="mb-3">
           <label for="campana" class="form-label">Edad</label>
-          <input type="text" class="form-control" id="campanaActualizar" .value="${this.edadActualizar}" @input="${(e) => (this.edadActualizar = e.target.value)}">
+          <input type="text" class="form-control" id="edadActualizar" .value="${profesor.edad}">
         </div>
         <div class="mb-3">
           <label for="telefono" class="form-label">Materia</label>
-          <input type="text" class="form-control" id="telefonoActualizar" .value="${this.materiaActualizar}" @input="${(e) => (this.materiaActualizar = e.target.value)}">
+          <input type="text" class="form-control" id="materiaActualizar" .value="${profesor.materia}" >
         </div>
         <div class="mb-3">
           <label for="telefono" class="form-label">Jornada</label>
-          <input type="text" class="form-control" id="telefonoActualizar" .value="${this.jornadaActualizar}" @input="${(e) => (this.jornadaActualizar = e.target.value)}">
+          <input type="text" class="form-control" id="jornadaActualizar" .value="${profesor.jornada}" >
         </div>
         <div class="mb-3">
           <label for="estado" class="form-label">Curso</label>
-          <input type="text" class="form-control" id="estadoActualizar" .value="${this.cursoActualizar}" @input="${(e) => (this.cursoActualizar = e.target.value)}">
+          <input type="text" class="form-control" id="cursoActualizar" .value="${profesor.curso}">
         </div>
-        <button type="button" class="btn btn-primary" @click="${this.actualizarProfesor}">Actualizar</button>
+        <button type="button" class="btn btn-primary" @click="${() => this.actualizarProfesor(profesor.documento)}">Actualizar</button>
       </form>
     </div>
   </div>
 </div>
 </div>
+
+    `
+  )}
+</tbody>
+</table>
+</div>
+
+
        
                                 
                                 </div>

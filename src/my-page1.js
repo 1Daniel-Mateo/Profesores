@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit-element";
 import { Router } from '@vaadin/router'; 
 
+
 export class MyElement extends LitElement {
   constructor() {
     super();
@@ -37,6 +38,7 @@ export class MyElement extends LitElement {
     this.estado = '';
     this.telefono = '';
     this.resultados = '';
+    this.mostrarComponente = false; 
 
     console.log(this.usuario);
     console.log(this.contraseña);
@@ -51,6 +53,7 @@ export class MyElement extends LitElement {
       campana: { type: String },
       estado: { type: String },
       telefono: { type: String },
+      mostrarComponente: { type: Boolean },
     }
   }
 
@@ -87,6 +90,7 @@ export class MyElement extends LitElement {
 
   navigate(location) {
     Router.go(location);
+    this.mostraCompo(true);
   }
   
 
@@ -153,8 +157,6 @@ buscarDatos() {
   }
   this.requestUpdate();
 }
-
-
 
 
   render() {
@@ -258,8 +260,9 @@ buscarDatos() {
             <!-- Contenido para el lado derecho, que cubre el resto de la página -->
             <div class="container-fluid bg-secondary p-3" style="height: 100vh;">
                 <div class="row" style="height: 100%">
-
+                
                     <div class="col-4 bg-dark rounded-3">
+                    
     <br />
     <!-- Pequeño formulario -->
     <form class="p-3 bg-white rounded-3">
